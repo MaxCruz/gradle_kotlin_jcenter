@@ -1,4 +1,5 @@
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'org.jetbrains.dokka-android'
 
 version = libraryVersion
 
@@ -8,15 +9,10 @@ if (project.hasProperty("android")) {
         classifier = 'sources'
         from android.sourceSets.main.java.srcDirs
     }
-
-    task dokkaDoc(type: Exec) {
-        workingDir '.'
-        ext.sourceDirs = "$workingDir/src/main"
-        ext.dokkaDir = "$workingDir/dokka/dokka-fatjar.jar"
-        ext.toolsDir = "$workingDir/dokka/"
-        ext.outputFormat = 'javadoc'
-        ext.destinationDir = "$buildDir/javadoc"
-        commandLine "java -Djava.ext.dirs=$toolsDir -jar $dokkaDir $sourceDirs -format $outputFormat -output $destinationDir"
+    
+    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'javadoc'
+        outputDirectory = "$buildDir/javadoc"
     }
 
 } else {
@@ -28,13 +24,13 @@ if (project.hasProperty("android")) {
     
 }
 
-task kotlinDocJar(type: Jar, dependsOn: dokkaDoc) {
+task dokkaJavadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     classifier = 'javadoc'
-    from dokkaDoc.destinationDir
+    from dokkaJavadoc.outputDirectory
 }
 
 artifacts {
-    archives kotlinDocJar
+    archives dokkaJavadocJar
     archives sourcesJar
 }
 
