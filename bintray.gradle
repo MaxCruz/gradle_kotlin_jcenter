@@ -1,4 +1,5 @@
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'org.jetbrains.dokka-android'
 
 version = libraryVersion
 
