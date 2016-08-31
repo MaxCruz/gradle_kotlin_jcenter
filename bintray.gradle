@@ -10,13 +10,13 @@ if (project.hasProperty("android")) {
     }
 
     task dokkaDoc(type: Exec) {
-        currentPath '.'
-        ext.sourceDirs = "$currentPath/src/main"
-        ext.dokkaPath = "$currentPath/dokka/dokka-fatjar.jar"
-        ext.toolsPath = "$currentPath/dokka/"
+        workingDir '.'
+        ext.sourceDirs = "$workingDir/src/main"
+        ext.dokkaDir = "$workingDir/dokka/dokka-fatjar.jar"
+        ext.toolsDir = "$workingDir/dokka/"
         ext.outputFormat = 'javadoc'
         ext.destinationDir = "$buildDir/javadoc"
-        commandLine "java -Djava.ext.dirs=$toolsPath -jar $dokkaPath $sourceDirs -format $outputFormat -output $destinationDir"
+        commandLine "java -Djava.ext.dirs=$toolsDir -jar $dokkaDir $sourceDirs -format $outputFormat -output $destinationDir"
     }
 
 } else {
